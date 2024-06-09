@@ -134,5 +134,8 @@ void errorLoop();
 
 #endif // MECANUM_CONFIG_H_
 
+// Ref : micro-ROS library for Arduino
+//       https://github.com/micro-ROS/micro_ros_arduino
+
 // Ref : H.Taheri, B.Qiao, N.Ghaeminezhad, "Kinematic Model of a Four Mecanum Wheeled Mobile Robot",
 //       International Journal of Computer Applications, 3 March 2015
