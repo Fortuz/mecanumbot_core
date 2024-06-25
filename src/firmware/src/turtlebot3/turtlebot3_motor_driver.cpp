@@ -243,7 +243,7 @@ bool Turtlebot3MotorDriver::write_profile_acceleration(uint32_t front_left_value
   return ret;
 }
 
-bool Turtlebot3MotorDriver::control_motors(const float wheel_separation, float linear_x_value, float linear_y_value, float angular_value)
+bool Turtlebot3MotorDriver::control_motors(const float wheel_distance_x, const float wheel_distance_y, float linear_x_value, float linear_y_value, float angular_value)
 {
   bool dxl_comm_result = false;
   
@@ -252,11 +252,10 @@ bool Turtlebot3MotorDriver::control_motors(const float wheel_separation, float l
   float lin_y_vel = linear_y_value;
   float ang_vel = angular_value;
 
-  // TODO: DISTANCE BETWEEN FRONT AND BACK WHEELS MIGHT BE NEEDED?! (ang_vel * (wheel_separation + front_back_distance) / 2)
-  wheel_velocity[LEFT_FRONT]   = lin_x_vel - lin_y_vel - (ang_vel * wheel_separation / 2);
-  wheel_velocity[RIGHT_FRONT]  = lin_x_vel + lin_y_vel + (ang_vel * wheel_separation / 2);
-  wheel_velocity[LEFT_REAR]   = lin_x_vel + lin_y_vel - (ang_vel * wheel_separation / 2);
-  wheel_velocity[RIGHT_REAR]  = lin_x_vel - lin_y_vel + (ang_vel * wheel_separation / 2);
+  wheel_velocity[LEFT_FRONT]   = lin_x_vel - lin_y_vel - (ang_vel * (wheel_distance_x + wheel_distance_y) / 2);
+  wheel_velocity[RIGHT_FRONT]  = lin_x_vel + lin_y_vel + (ang_vel * (wheel_distance_x + wheel_distance_y) / 2);
+  wheel_velocity[LEFT_REAR]   = lin_x_vel + lin_y_vel - (ang_vel * (wheel_distance_x + wheel_distance_y) / 2);
+  wheel_velocity[RIGHT_REAR]  = lin_x_vel - lin_y_vel + (ang_vel * (wheel_distance_x + wheel_distance_y) / 2);
 
   wheel_velocity[LEFT_FRONT]  = constrain(wheel_velocity[LEFT_FRONT]  * VELOCITY_CONSTANT_VALUE, -LIMIT_X_MAX_VELOCITY, LIMIT_X_MAX_VELOCITY);
   wheel_velocity[RIGHT_FRONT] = constrain(wheel_velocity[RIGHT_FRONT] * VELOCITY_CONSTANT_VALUE, -LIMIT_X_MAX_VELOCITY, LIMIT_X_MAX_VELOCITY);

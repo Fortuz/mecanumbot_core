@@ -23,7 +23,8 @@ typedef struct TB3ModelInfo{
   const char* model_str;
   uint32_t model_info;
   float wheel_radius;
-  float wheel_separation;
+  float wheel_distance_x;
+  float wheel_distance_y;
   float turning_radius;
   float robot_radius;
   bool has_manipulator;
@@ -34,6 +35,7 @@ static const TB3ModelInfo burger_info = {
   1,
   0.033,
   0.160,
+  0, // wheel_distance_y is irrelevant here
   0.080,
   0.105,
   false,
@@ -44,6 +46,7 @@ static const TB3ModelInfo waffle_info = {
   2,
   0.033,
   0.287,
+  0, // wheel_distance_y is irrelevant here
   0.1435,
   0.220,
   false,
@@ -54,6 +57,7 @@ static const TB3ModelInfo mecanum_info = {
   2,
   0.033,
   0.287,
+  0, // wheel_distance_y is not measured yet
   0.1435,
   0.220,
   false,
@@ -64,6 +68,7 @@ static const TB3ModelInfo waffle_with_manipulator_info = {
   3,
   0.033,
   0.287,
+  0, // wheel_distance_y is irrelevant here
   0.1435,
   0.220,
   true,
@@ -356,7 +361,7 @@ void TurtleBot3Core::begin(const char* model_name)
   min_linear_x_velocity = -max_linear_x_velocity;
   max_linear_y_velocity = p_tb3_model_info->wheel_radius*2*PI*model_motor_rpm/60;
   min_linear_y_velocity = -max_linear_y_velocity;
-  max_angular_velocity = max_linear_velocity/p_tb3_model_info->turning_radius;
+  max_angular_velocity = max_linear_x_velocity/p_tb3_model_info->turning_radius;
   min_angular_velocity = -max_angular_velocity;
 
   bool ret; (void)ret;
@@ -375,7 +380,7 @@ void TurtleBot3Core::begin(const char* model_name)
   ret = diagnosis.init();
   DEBUG_PRINTLN(ret==true?"Diagnosis setup completed.":"Diagnosis setup failed.");
   // Setting for ROBOTIS RC100 remote controller and cmd_vel
-  ret = controllers.init(max_linear_velocity, max_angular_velocity);
+  ret = controllers.init(max_linear_x_velocity, max_linear_y_velocity, max_angular_velocity);
   DEBUG_PRINTLN(ret==true?"RC100 Controller setup completed.":"RC100 Controller setup failed.");
 
   if (p_tb3_model_info->has_manipulator == true)
@@ -636,7 +641,7 @@ void TurtleBot3Core::run()
     }
     update_goal_velocity_from_3values();
     if(get_connection_state_with_motors() == true){
-      motor_driver.control_motors(p_tb3_model_info->wheel_separation, goal_velocity[VelocityType::LINEAR_X], goal_velocity[VelocityType::LINEAR_Y], goal_velocity[VelocityType::ANGULAR]);
+      motor_driver.control_motors(p_tb3_model_info->wheel_distance_x, p_tb3_model_info->wheel_distance_y, goal_velocity[VelocityType::LINEAR_X], goal_velocity[VelocityType::LINEAR_Y], goal_velocity[VelocityType::ANGULAR]);
     }
   }  
 }
