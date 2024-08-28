@@ -5,7 +5,7 @@ The original turtlebot3_ros2 library modified to work with a turtlebot3 waffle w
 
 ### 1. Add mecanumbot library
 
-Copy the `mecanumbot` folder to `C:\Users\[myuser]\Documents\Arduino\libraries\`.
+Copy the `mecanumbot_lib` folder to `C:\Users\[myuser]\Documents\Arduino\libraries\`.
 
 ### 2. Open project
 
