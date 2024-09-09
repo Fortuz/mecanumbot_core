@@ -26,10 +26,10 @@ const uint16_t LIMIT_X_MAX_VELOCITY = 337;
 const float VELOCITY_CONSTANT_VALUE = 1263.632956882; 
 
 /* DYNAMIXEL Information for controlling motors and  */
-const uint8_t DXL_MOTOR_ID_LEFT_FRONT = 1; // ID of left motor
-const uint8_t DXL_MOTOR_ID_RIGHT_FRONT = 2; // ID of right motor
-const uint8_t DXL_MOTOR_ID_LEFT_BACK = 3;
-const uint8_t DXL_MOTOR_ID_RIGHT_BACK = 4;
+const uint8_t DXL_MOTOR_ID_LEFT_FRONT = 2; // ID of front left motor
+const uint8_t DXL_MOTOR_ID_RIGHT_FRONT = 1; // ID of front right motor
+const uint8_t DXL_MOTOR_ID_LEFT_BACK = 4; // ID of rear left motor
+const uint8_t DXL_MOTOR_ID_RIGHT_BACK = 3; // ID of rear right motor
 const float DXL_PORT_PROTOCOL_VERSION = 2.0; // Dynamixel protocol version 2.0
 const uint32_t DXL_PORT_BAUDRATE = 1000000; // baurd rate of Dynamixel
 const int OPENCR_DXL_DIR_PIN = 84; // Arduino pin number of DYNAMIXEL direction pin on OpenCR.
@@ -252,27 +252,20 @@ bool Turtlebot3MotorDriver::control_motors(const float wheel_separation, float l
   float lin_y_vel = linear_y_value;
   float ang_vel = angular_value;
 
-  float r = 0.05;
-  float wheel_separation_side = 0.08;
+  const float r = 0.05;
+  const float wheel_separation_side = 0.08;
 
+  // ORIGINAL
   /*wheel_velocity[LEFT_FRONT]   = lin_x_vel - (ang_vel * wheel_separation / 2);
   wheel_velocity[RIGHT_FRONT]  = lin_x_vel + (ang_vel * wheel_separation / 2);
   wheel_velocity[LEFT_BACK]   = lin_x_vel - (ang_vel * wheel_separation / 2);
   wheel_velocity[RIGHT_BACK]  = lin_x_vel + (ang_vel * wheel_separation / 2);*/
 
-  /*wheel_velocity[LEFT_FRONT] = 1/r * (lin_x_vel - lin_y_vel - (wheel_separation + wheel_separation_side) * ang_vel);
-  wheel_velocity[RIGHT_FRONT] = - 1/r * (lin_x_vel + lin_y_vel + (wheel_separation + wheel_separation_side) * ang_vel);
-  //                            ^ the minus is only here because this wheel moves in the opposite direction for some
-  //                             reason and I correct it here
-  wheel_velocity[LEFT_BACK] = 1/r * (lin_x_vel + lin_y_vel - (wheel_separation + wheel_separation_side) * ang_vel);
-  wheel_velocity[RIGHT_BACK] = 1/r * (lin_x_vel - lin_y_vel + (wheel_separation + wheel_separation_side) * ang_vel);*/
-
-  wheel_velocity[LEFT_FRONT] = lin_x_vel - lin_y_vel - (ang_vel * wheel_separation / 2);
-  wheel_velocity[RIGHT_FRONT] = (-1) * (lin_x_vel + lin_y_vel + (ang_vel * wheel_separation / 2));
-  //                             ^ the minus is only here because this wheel moves in the opposite
-  //                             direction for some reason and I correct it here
-  wheel_velocity[LEFT_BACK] = lin_x_vel + lin_y_vel - (ang_vel * wheel_separation / 2);
-  wheel_velocity[RIGHT_BACK] = lin_x_vel - lin_y_vel + (ang_vel * wheel_separation / 2);
+  wheel_velocity[LEFT_FRONT]   = (lin_x_vel - lin_y_vel - ((wheel_separation + wheel_separation_side) / 4) * ang_vel);
+  wheel_velocity[RIGHT_FRONT]  = -(lin_x_vel + lin_y_vel + ((wheel_separation + wheel_separation_side) / 4) * ang_vel);
+                              // ^ right front wheel moves opposite to others, temporarily fixed it here
+  wheel_velocity[LEFT_BACK]   = (lin_x_vel + lin_y_vel - ((wheel_separation + wheel_separation_side) / 4) * ang_vel);
+  wheel_velocity[RIGHT_BACK]  = (lin_x_vel - lin_y_vel + ((wheel_separation + wheel_separation_side) / 4) * ang_vel);
 
   wheel_velocity[LEFT_FRONT]  = constrain(wheel_velocity[LEFT_FRONT]  * VELOCITY_CONSTANT_VALUE, -LIMIT_X_MAX_VELOCITY, LIMIT_X_MAX_VELOCITY);
   wheel_velocity[RIGHT_FRONT] = constrain(wheel_velocity[RIGHT_FRONT] * VELOCITY_CONSTANT_VALUE, -LIMIT_X_MAX_VELOCITY, LIMIT_X_MAX_VELOCITY);

@@ -46,7 +46,7 @@ void Turtlebot3Controller::getRCdata(float *get_cmd_vel)
 {
   uint16_t received_data = 0;
 
-  static float lin_x = 0.0, ang_z = 0.0;
+  static float lin_x = 0.0, lin_y = 0.0, ang_z = 0.0;
   
   if (rc100_.available())
   {
@@ -62,9 +62,17 @@ void Turtlebot3Controller::getRCdata(float *get_cmd_vel)
     }
     else if (received_data & RC100_BTN_L)
     {
-      ang_z += VELOCITY_ANGULAR_Z * scale_ang_vel_;
+      lin_y += VELOCITY_LINEAR_Y * scale_lin_y_vel_;
     }
     else if (received_data & RC100_BTN_R)
+    {
+      lin_y -= VELOCITY_LINEAR_Y * scale_lin_y_vel_;
+    }
+    else if (received_data & RC100_BTN_2)
+    {
+      ang_z += VELOCITY_ANGULAR_Z * scale_ang_vel_;
+    }
+    else if (received_data & RC100_BTN_4)
     {
       ang_z -= VELOCITY_ANGULAR_Z * scale_ang_vel_;
     }
@@ -81,13 +89,16 @@ void Turtlebot3Controller::getRCdata(float *get_cmd_vel)
     else
     {
       lin_x = lin_x;
+      lin_y = lin_y;
       ang_z = ang_z;
     }
 
     lin_x = constrain(lin_x, min_lin_x_vel_, max_lin_x_vel_);
+    lin_y = constrain(lin_y, min_lin_y_vel_, max_lin_y_vel_);
     ang_z = constrain(ang_z, min_ang_vel_, max_ang_vel_);
 
     get_cmd_vel[0] = lin_x;
-    get_cmd_vel[1] = ang_z;
+    get_cmd_vel[1] = lin_y;
+    get_cmd_vel[2] = ang_z;
   }
 }

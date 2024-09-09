@@ -31,9 +31,9 @@
   #define DEBUG_PRINT(x) SerialBT2.print(x)
   #define DEBUG_PRINTLN(x) SerialBT2.println(x)
 #else
-  #define DEBUG_SERIAL_BEGIN(x) 
-  #define DEBUG_PRINT(x) 
-  #define DEBUG_PRINTLN(x) 
+  #define DEBUG_SERIAL_BEGIN(x)
+  #define DEBUG_PRINT(x)
+  #define DEBUG_PRINTLN(x)
 #endif
 
 const uint8_t FIRMWARE_VER = 5; //DYNAMIXEL2Arduino v0.6.1 or higher is required.

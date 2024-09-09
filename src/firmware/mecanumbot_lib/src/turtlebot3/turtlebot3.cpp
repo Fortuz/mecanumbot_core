@@ -360,7 +360,7 @@ void TurtleBot3Core::begin(const char* model_name)
   min_angular_velocity = -max_angular_velocity;
 
   bool ret; (void)ret;
-  DEBUG_SERIAL_BEGIN(57600);
+  DEBUG_SERIAL_BEGIN(9600);
   DEBUG_PRINTLN(" ");
   DEBUG_PRINTLN("Version : V221004R1");
   DEBUG_PRINTLN("Begin Start...");
@@ -1042,7 +1042,7 @@ void test_motors_with_buttons(uint8_t buttons)
 
   if (buttons & (1<<0))  
   {
-    move[VelocityType::LINEAR_X] = true;
+    move[VelocityType::LINEAR_Y] = true;
     saved_tick[MortorLocation::RIGHT_FRONT] = current_tick[MortorLocation::RIGHT_FRONT];
 
     diff_encoder = TEST_DISTANCE / (0.207 / 4096); // (Circumference of Wheel) / (The number of tick per revolution)
@@ -1060,6 +1060,18 @@ void test_motors_with_buttons(uint8_t buttons)
     if (abs(saved_tick[MortorLocation::RIGHT_FRONT] - current_tick[MortorLocation::RIGHT_FRONT]) <= diff_encoder)
     {
       goal_velocity_from_button[VelocityType::LINEAR_X]  = 0.05;
+    }
+    else
+    {
+      goal_velocity_from_button[VelocityType::LINEAR_X]  = 0.0;
+      move[VelocityType::LINEAR_X] = false;
+    }
+  }
+  else if (move[VelocityType::LINEAR_Y])
+  {    
+    if (abs(saved_tick[MortorLocation::RIGHT_FRONT] - current_tick[MortorLocation::RIGHT_FRONT]) <= diff_encoder)
+    {
+      goal_velocity_from_button[VelocityType::LINEAR_Y]  = 0.05;
     }
     else
     {
