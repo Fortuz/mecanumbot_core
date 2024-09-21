@@ -10,4 +10,4 @@ Read setup instructions [here](/setup.md).
 
 ## Usage
 
-**TODO bringup here**
+\[BRINGUP HERE]
