@@ -13,6 +13,6 @@ Open the `turtlebot3_mecanum/turtlebot3_mecanum.ino` file.
 
 ### 3. Add library to sketch
 
-If Arduino IDE does not find your library automatically, go to `Sketch > Include Library... > mecanumbot`.
+If Arduino IDE does not find your library automatically, go to `Sketch > Include Library... > mecanumbot_lib`.
 
 Now the sketch should compile without any issues.
