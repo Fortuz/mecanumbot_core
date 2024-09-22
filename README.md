@@ -6,7 +6,7 @@
 
 ## Setup
 
-Read setup instructions [here](/setup.md).
+You can setup the Mecanumbot by following [the custom instructions](/setup.md).
 
 ## Usage
 
