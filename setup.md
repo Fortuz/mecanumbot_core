@@ -69,7 +69,7 @@ Press `Ctrl + ,` to open the Preferences menu (or go to `File > Preferences`).
 
 ### 3.6 Add Board Manager URL
 Enter below address in the `Additional Boards Manager URLs`.
-```bash
+```
 https://raw.githubusercontent.com/ROBOTIS-GIT/OpenCR/master/arduino/opencr_release/package_opencr_index.json
 ```
 
