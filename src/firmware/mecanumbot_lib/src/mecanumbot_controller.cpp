@@ -16,15 +16,15 @@
 
 #include "../include/mecanumbot_controller.h"
 
-Turtlebot3Controller::Turtlebot3Controller()
+MecanumbotController::MecanumbotController()
 {
   const_cmd_vel_ = CONST_VEL;
 }
 
-Turtlebot3Controller::~Turtlebot3Controller()
+MecanumbotController::~MecanumbotController()
 {}
 
-bool Turtlebot3Controller::init(float max_lin_x_vel, float max_lin_y_vel, float max_ang_vel, uint8_t scale_lin_x_vel, uint8_t scale_lin_y_vel, uint8_t scale_ang_vel)
+bool MecanumbotController::init(float max_lin_x_vel, float max_lin_y_vel, float max_ang_vel, uint8_t scale_lin_x_vel, uint8_t scale_lin_y_vel, uint8_t scale_ang_vel)
 {
   // 57600bps baudrate for RC100 control
   rc100_.begin(1);  
@@ -42,7 +42,7 @@ bool Turtlebot3Controller::init(float max_lin_x_vel, float max_lin_y_vel, float 
   return true;
 }
 
-void Turtlebot3Controller::getRCdata(float *get_cmd_vel)
+void MecanumbotController::getRCdata(float *get_cmd_vel)
 {
   uint16_t received_data = 0;
 
@@ -79,11 +79,13 @@ void Turtlebot3Controller::getRCdata(float *get_cmd_vel)
     else if (received_data & RC100_BTN_6)
     {
       lin_x = const_cmd_vel_;
+      lin_y = 0.0;
       ang_z = 0.0;
     }
     else if (received_data & RC100_BTN_5)
     {
       lin_x = 0.0;
+      lin_y = 0.0;
       ang_z = 0.0;
     }
     else

@@ -106,7 +106,7 @@ static Turtlebot3Diagnosis diagnosis;
 /*******************************************************************************
 * Declaration for controllers
 *******************************************************************************/
-static Turtlebot3Controller controllers;
+static MecanumbotController controllers;
 
 /*******************************************************************************
 * Declaration for DYNAMIXEL Slave Function

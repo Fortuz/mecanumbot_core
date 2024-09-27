@@ -14,8 +14,8 @@
 * limitations under the License.
 *******************************************************************************/
 
-#ifndef TURTLEBOT3_CONTROLLER_H_
-#define TURTLEBOT3_CONTROLLER_H_
+#ifndef MECANUMBOT_CONTROLLER_H_
+#define MECANUMBOT_CONTROLLER_H_
 
 #include <RC100.h>
 
@@ -25,11 +25,11 @@
 #define VELOCITY_LINEAR_Y		  0.01   // m/s
 #define VELOCITY_ANGULAR_Z               0.1    // rad/s
 
-class Turtlebot3Controller
+class MecanumbotController
 {
  public:
-  Turtlebot3Controller();
-  ~Turtlebot3Controller();
+  MecanumbotController();
+  ~MecanumbotController();
 
   bool init(float max_lin_x_vel, float max_lin_y_vel, float max_ang_vel, uint8_t scale_lin_x_vel = 1, uint8_t scale_lin_y_vel = 1, uint8_t scale_ang_vel = 1);
 
@@ -51,4 +51,4 @@ class Turtlebot3Controller
   uint8_t scale_ang_vel_;
 };
 
-#endif // TURTLEBOT3_CONTROLLER_H_
+#endif // MECANUMBOT_CONTROLLER_H_
