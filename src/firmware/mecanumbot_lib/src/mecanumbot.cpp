@@ -73,7 +73,7 @@ static const TB3ModelInfo mecanum_info = {
 /*******************************************************************************
 * Declaration for motors
 *******************************************************************************/
-static Turtlebot3MotorDriver motor_driver;
+static MecanumbotMotorDriver motor_driver;
 static OpenManipulatorDriver manipulator_driver(motor_driver.getDxl());
 
 static const TB3ModelInfo* p_tb3_model_info;

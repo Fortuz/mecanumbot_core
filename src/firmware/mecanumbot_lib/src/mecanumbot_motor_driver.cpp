@@ -41,7 +41,7 @@ Dynamixel2Arduino dxl(Serial3, OPENCR_DXL_DIR_PIN);
 
 
 
-Turtlebot3MotorDriver::Turtlebot3MotorDriver()
+MecanumbotMotorDriver::MecanumbotMotorDriver()
 : left_front_wheel_id_(DXL_MOTOR_ID_LEFT_FRONT),
   right_front_wheel_id_(DXL_MOTOR_ID_RIGHT_FRONT),
   left_back_wheel_id_(DXL_MOTOR_ID_LEFT_BACK),
@@ -50,13 +50,13 @@ Turtlebot3MotorDriver::Turtlebot3MotorDriver()
 {
 }
 
-Turtlebot3MotorDriver::~Turtlebot3MotorDriver()
+MecanumbotMotorDriver::~MecanumbotMotorDriver()
 {
   close();
   digitalWrite(BDPIN_DXL_PWR_EN, LOW);
 }
 
-bool Turtlebot3MotorDriver::init(void)
+bool MecanumbotMotorDriver::init(void)
 {
   pinMode(BDPIN_DXL_PWR_EN, OUTPUT);
   digitalWrite(BDPIN_DXL_PWR_EN, HIGH);
@@ -85,17 +85,17 @@ bool Turtlebot3MotorDriver::init(void)
   return true;
 }
 
-Dynamixel2Arduino& Turtlebot3MotorDriver::getDxl()
+Dynamixel2Arduino& MecanumbotMotorDriver::getDxl()
 {
   return dxl;
 }
 
-bool Turtlebot3MotorDriver::is_connected()
+bool MecanumbotMotorDriver::is_connected()
 {
   return (dxl.ping(DXL_MOTOR_ID_LEFT_FRONT) == true && dxl.ping(DXL_MOTOR_ID_RIGHT_FRONT) == true) && (dxl.ping(DXL_MOTOR_ID_LEFT_BACK) == true && dxl.ping(DXL_MOTOR_ID_RIGHT_BACK) == true);
 }
 
-bool Turtlebot3MotorDriver::set_torque(bool onoff)
+bool MecanumbotMotorDriver::set_torque(bool onoff)
 {
   bool ret = false;
 
@@ -114,7 +114,7 @@ bool Turtlebot3MotorDriver::set_torque(bool onoff)
   return ret;
 }
 
-bool Turtlebot3MotorDriver::get_torque()
+bool MecanumbotMotorDriver::get_torque()
 {
   if(dxl.readControlTableItem(TORQUE_ENABLE, left_front_wheel_id_) == true
     && dxl.readControlTableItem(TORQUE_ENABLE, right_front_wheel_id_) == true
@@ -128,13 +128,13 @@ bool Turtlebot3MotorDriver::get_torque()
   return torque_;
 }
 
-void Turtlebot3MotorDriver::close(void)
+void MecanumbotMotorDriver::close(void)
 {
   // Disable Dynamixel Torque
   set_torque(false);
 }
 
-bool Turtlebot3MotorDriver::read_present_position(int32_t &left_front_value, int32_t &right_front_value, int32_t &left_back_value, int32_t &right_back_value)
+bool MecanumbotMotorDriver::read_present_position(int32_t &left_front_value, int32_t &right_front_value, int32_t &left_back_value, int32_t &right_back_value)
 {
   bool ret = false;
 
@@ -152,7 +152,7 @@ bool Turtlebot3MotorDriver::read_present_position(int32_t &left_front_value, int
   return ret;
 }
 
-bool Turtlebot3MotorDriver::read_present_velocity(int32_t &left_front_value, int32_t &right_front_value, int32_t &left_back_value, int32_t &right_back_value)
+bool MecanumbotMotorDriver::read_present_velocity(int32_t &left_front_value, int32_t &right_front_value, int32_t &left_back_value, int32_t &right_back_value)
 {
   bool ret = false;
 
@@ -170,7 +170,7 @@ bool Turtlebot3MotorDriver::read_present_velocity(int32_t &left_front_value, int
   return ret;
 }
 
-bool Turtlebot3MotorDriver::read_present_current(int16_t &left_front_value, int16_t &right_front_value, int16_t &left_back_value, int16_t &right_back_value)
+bool MecanumbotMotorDriver::read_present_current(int16_t &left_front_value, int16_t &right_front_value, int16_t &left_back_value, int16_t &right_back_value)
 {
   bool ret = false;
 
@@ -188,7 +188,7 @@ bool Turtlebot3MotorDriver::read_present_current(int16_t &left_front_value, int1
   return ret;
 }
 
-bool Turtlebot3MotorDriver::read_profile_acceleration(uint32_t &left_front_value, uint32_t &right_front_value, int32_t &left_back_value, int32_t &right_back_value)
+bool MecanumbotMotorDriver::read_profile_acceleration(uint32_t &left_front_value, uint32_t &right_front_value, int32_t &left_back_value, int32_t &right_back_value)
 {
   bool ret = false;
 
@@ -207,7 +207,7 @@ bool Turtlebot3MotorDriver::read_profile_acceleration(uint32_t &left_front_value
 }
 
 
-bool Turtlebot3MotorDriver::write_velocity(int32_t left_front_value, int32_t right_front_value, int32_t left_back_value, int32_t right_back_value)
+bool MecanumbotMotorDriver::write_velocity(int32_t left_front_value, int32_t right_front_value, int32_t left_back_value, int32_t right_back_value)
 {
   bool ret = false;
 
@@ -225,7 +225,7 @@ bool Turtlebot3MotorDriver::write_velocity(int32_t left_front_value, int32_t rig
   return ret;
 }
 
-bool Turtlebot3MotorDriver::write_profile_acceleration(uint32_t left_front_value, uint32_t right_front_value, int32_t left_back_value, int32_t right_back_value)
+bool MecanumbotMotorDriver::write_profile_acceleration(uint32_t left_front_value, uint32_t right_front_value, int32_t left_back_value, int32_t right_back_value)
 {
   bool ret = false;
 
@@ -243,7 +243,7 @@ bool Turtlebot3MotorDriver::write_profile_acceleration(uint32_t left_front_value
   return ret;
 }
 
-bool Turtlebot3MotorDriver::control_motors(const float wheel_separation, float linear_x_value, float linear_y_value, float angular_value)
+bool MecanumbotMotorDriver::control_motors(const float wheel_separation, float linear_x_value, float linear_y_value, float angular_value)
 {
   bool dxl_comm_result = false;
   
@@ -255,7 +255,7 @@ bool Turtlebot3MotorDriver::control_motors(const float wheel_separation, float l
   const float r = 0.05;
   const float wheel_separation_side = 0.08;
 
-  // ORIGINAL
+  // ORIGINAL DIFF DRIVE
   /*wheel_velocity[LEFT_FRONT]   = lin_x_vel - (ang_vel * wheel_separation / 2);
   wheel_velocity[RIGHT_FRONT]  = lin_x_vel + (ang_vel * wheel_separation / 2);
   wheel_velocity[LEFT_BACK]   = lin_x_vel - (ang_vel * wheel_separation / 2);

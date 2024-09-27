@@ -14,8 +14,8 @@
 * limitations under the License.
 *******************************************************************************/
 
-#ifndef TURTLEBOT3_MOTOR_DRIVER_H_
-#define TURTLEBOT3_MOTOR_DRIVER_H_
+#ifndef MECANUMBOT_MOTOR_DRIVER_H_
+#define MECANUMBOT_MOTOR_DRIVER_H_
 
 #include <Dynamixel2Arduino.h>
 
@@ -37,11 +37,11 @@ enum VelocityType{
 };
 
 
-class Turtlebot3MotorDriver
+class MecanumbotMotorDriver
 {
  public:
-  Turtlebot3MotorDriver();
-  ~Turtlebot3MotorDriver();
+  MecanumbotMotorDriver();
+  ~MecanumbotMotorDriver();
   
   bool init(void);
   void close(void);
@@ -71,4 +71,4 @@ class Turtlebot3MotorDriver
   bool torque_;
 };
 
-#endif // TURTLEBOT3_MOTOR_DRIVER_H_
+#endif // MECANUMBOT_MOTOR_DRIVER_H_
