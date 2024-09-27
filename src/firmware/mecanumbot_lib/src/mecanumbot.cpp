@@ -96,7 +96,7 @@ static void set_connection_state_with_joints(bool is_connected);
 /*******************************************************************************
 * Declaration for sensors
 *******************************************************************************/
-static Turtlebot3Sensor sensors;
+static MecanumbotSensor sensors;
 
 /*******************************************************************************
 * Declaration for diagnosis

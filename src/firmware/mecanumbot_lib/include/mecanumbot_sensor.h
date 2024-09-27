@@ -14,8 +14,8 @@
 * limitations under the License.
 *******************************************************************************/
 
-#ifndef TURTLEBOT3_SENSOR_H_
-#define TURTLEBOT3_SENSOR_H_
+#ifndef MECANUMBOT_SENSOR_H_
+#define MECANUMBOT_SENSOR_H_
 
 #include <IMU.h>
 
@@ -42,11 +42,11 @@ typedef struct SONAR_PIN
   int echo;
 }SonarPin;
 
-class Turtlebot3Sensor
+class MecanumbotSensor
 {
  public:
-  Turtlebot3Sensor();
-  ~Turtlebot3Sensor();
+  MecanumbotSensor();
+  ~MecanumbotSensor();
 
   bool init(void);
 
@@ -106,4 +106,4 @@ class Turtlebot3Sensor
   uint8_t melody_duration_[8];
 };
 
-#endif // TURTLEBOT3_SENSOR_H_
+#endif // MECANUMBOT_SENSOR_H_

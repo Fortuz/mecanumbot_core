@@ -16,14 +16,17 @@
 
 #include "../include/mecanumbot_sensor.h"
 
-Turtlebot3Sensor::Turtlebot3Sensor()
+MecanumbotSensor::MecanumbotSensor()
 {
+
 }
 
-Turtlebot3Sensor::~Turtlebot3Sensor()
-{}
+MecanumbotSensor::~MecanumbotSensor()
+{
+  
+}
 
-bool Turtlebot3Sensor::init(void)
+bool MecanumbotSensor::init(void)
 {
   bool ret = false;
 
@@ -40,17 +43,17 @@ bool Turtlebot3Sensor::init(void)
   return ret;
 }
 
-void Turtlebot3Sensor::initIMU(void)
+void MecanumbotSensor::initIMU(void)
 {
   imu_.begin();
 }
 
-void Turtlebot3Sensor::updateIMU(void)
+void MecanumbotSensor::updateIMU(void)
 {
   imu_.update();
 }
 
-void Turtlebot3Sensor::calibrationGyro()
+void MecanumbotSensor::calibrationGyro()
 {
   uint32_t pre_time;
   uint32_t t_time;
@@ -78,7 +81,7 @@ void Turtlebot3Sensor::calibrationGyro()
   }
 }
 
-float* Turtlebot3Sensor::getImuAngularVelocity(void)
+float* MecanumbotSensor::getImuAngularVelocity(void)
 {
   static float angular_vel[3];
 
@@ -89,7 +92,7 @@ float* Turtlebot3Sensor::getImuAngularVelocity(void)
   return angular_vel;
 }
 
-float* Turtlebot3Sensor::getImuLinearAcc(void)
+float* MecanumbotSensor::getImuLinearAcc(void)
 {
   static float linear_acc[3];
 
@@ -100,7 +103,7 @@ float* Turtlebot3Sensor::getImuLinearAcc(void)
   return linear_acc;
 }
 
-float* Turtlebot3Sensor::getImuMagnetic(void)
+float* MecanumbotSensor::getImuMagnetic(void)
 {
   static float magnetic[3];
 
@@ -111,7 +114,7 @@ float* Turtlebot3Sensor::getImuMagnetic(void)
   return magnetic;
 }
 
-float* Turtlebot3Sensor::getOrientation(void)
+float* MecanumbotSensor::getOrientation(void)
 {
   static float orientation[4];
 
@@ -123,7 +126,7 @@ float* Turtlebot3Sensor::getOrientation(void)
   return orientation;
 }
 
-float Turtlebot3Sensor::checkVoltage(void)
+float MecanumbotSensor::checkVoltage(void)
 {
   float vol_value;
   
@@ -132,12 +135,12 @@ float Turtlebot3Sensor::checkVoltage(void)
   return vol_value;
 }
 
-uint8_t Turtlebot3Sensor::checkPushButton(void)
+uint8_t MecanumbotSensor::checkPushButton(void)
 {
   return getPushButton();
 }
 
-void Turtlebot3Sensor::onMelody()
+void MecanumbotSensor::onMelody()
 {
   static uint8_t pre_note_number = 7, current_note_number;
   static uint32_t pre_time;
@@ -172,7 +175,7 @@ void Turtlebot3Sensor::onMelody()
   }
 }
 
-void Turtlebot3Sensor::makeMelody(uint8_t index)
+void MecanumbotSensor::makeMelody(uint8_t index)
 {
   const uint16_t NOTE_C4 = 262;
   const uint16_t NOTE_D4 = 294;
@@ -246,13 +249,13 @@ void Turtlebot3Sensor::makeMelody(uint8_t index)
   is_melody_play_complete_ = false;
 }
 
-void Turtlebot3Sensor::initBumper(void)
+void MecanumbotSensor::initBumper(void)
 {
   ollo_.begin(3, TOUCH_SENSOR);
   ollo_.begin(4, TOUCH_SENSOR);
 }
 
-uint8_t Turtlebot3Sensor::checkPushBumper(void)
+uint8_t MecanumbotSensor::checkPushBumper(void)
 {
   uint8_t push_state = 0;
 
@@ -263,29 +266,29 @@ uint8_t Turtlebot3Sensor::checkPushBumper(void)
   return push_state;
 }
 
-bool Turtlebot3Sensor::getBumper1State()
+bool MecanumbotSensor::getBumper1State()
 {
   return ollo_.read(3, TOUCH_SENSOR); 
 }
 
-bool Turtlebot3Sensor::getBumper2State()
+bool MecanumbotSensor::getBumper2State()
 {
   return ollo_.read(4, TOUCH_SENSOR);
 }
 
-void Turtlebot3Sensor::initIR(void)
+void MecanumbotSensor::initIR(void)
 {
   ollo_.begin(2, IR_SENSOR);
 }
 
-float Turtlebot3Sensor::getIRsensorData(void)
+float MecanumbotSensor::getIRsensorData(void)
 {
   float ir_data = ollo_.read(2, IR_SENSOR);
   
   return ir_data;
 }
 
-void Turtlebot3Sensor::initSonar(void)
+void MecanumbotSensor::initSonar(void)
 {
   sonar_pin_.trig = BDPIN_GPIO_1;
   sonar_pin_.echo = BDPIN_GPIO_2;
@@ -294,7 +297,7 @@ void Turtlebot3Sensor::initSonar(void)
   pinMode(sonar_pin_.echo, INPUT);
 }
 
-void Turtlebot3Sensor::updateSonar(uint32_t t)
+void MecanumbotSensor::updateSonar(uint32_t t)
 {
   static uint32_t t_time = 0;
   static bool make_pulse = TRUE;
@@ -329,7 +332,7 @@ void Turtlebot3Sensor::updateSonar(uint32_t t)
   sonar_data_ = distance;
 }
 
-float Turtlebot3Sensor::getSonarData(void)
+float MecanumbotSensor::getSonarData(void)
 {
   float distance = 0.0;
 
@@ -338,7 +341,7 @@ float Turtlebot3Sensor::getSonarData(void)
   return distance;
 }
 
-float Turtlebot3Sensor::getIlluminationData(void)
+float MecanumbotSensor::getIlluminationData(void)
 {
   uint16_t light;
 
@@ -347,7 +350,7 @@ float Turtlebot3Sensor::getIlluminationData(void)
   return light;
 }
 
-void Turtlebot3Sensor::initLED(void)
+void MecanumbotSensor::initLED(void)
 {
   led_pin_array_.front_left  = BDPIN_GPIO_4;
   led_pin_array_.front_right = BDPIN_GPIO_6;
@@ -360,7 +363,7 @@ void Turtlebot3Sensor::initLED(void)
   pinMode(led_pin_array_.back_right, OUTPUT);
 }
 
-void Turtlebot3Sensor::setLedPattern(double linear_vel, double angular_vel)
+void MecanumbotSensor::setLedPattern(double linear_vel, double angular_vel)
 {
   if (linear_vel > 0.0 && angular_vel == 0.0)     // front
   {
