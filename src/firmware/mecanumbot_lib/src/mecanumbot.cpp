@@ -674,7 +674,9 @@ void MecanumbotCore::run()
     pre_time_to_control_motor = millis();
     if(get_connection_state_with_ros2_node() == false){
       memset(goal_velocity_from_cmd, 0, sizeof(goal_velocity_from_cmd));
+      memset(grabber_goal_position_from_topic, 0, sizeof(grabber_goal_position_from_topic));
     }
+
     update_goal_velocity_from_3values();
     if(get_connection_state_with_motors() == true){
       motor_driver.control_motors(p_tb3_model_info->wheel_separation, goal_velocity[VelocityType::LINEAR_X], goal_velocity[VelocityType::LINEAR_Y], goal_velocity[VelocityType::ANGULAR]);
