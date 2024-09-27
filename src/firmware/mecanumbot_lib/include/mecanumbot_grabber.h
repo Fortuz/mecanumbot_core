@@ -8,7 +8,7 @@
 enum GrabberMotorLocation{
   LEFT = 0,
   RIGHT,
-  MOTOR_NUM_MAX
+  GRABBER_MOTOR_NUM_MAX
 };
 
 class MecanumbotGrabber
