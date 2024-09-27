@@ -21,7 +21,7 @@
 
 #define TORQUE_ENABLE ControlTableItem::TORQUE_ENABLE
 
-enum MortorLocation{
+enum MotorLocation{
   LEFT_FRONT = 0,
   RIGHT_FRONT,
   LEFT_BACK,

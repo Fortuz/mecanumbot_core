@@ -247,7 +247,7 @@ bool MecanumbotMotorDriver::control_motors(const float wheel_separation, float l
 {
   bool dxl_comm_result = false;
   
-  float wheel_velocity[MortorLocation::MOTOR_NUM_MAX];
+  float wheel_velocity[MotorLocation::MOTOR_NUM_MAX];
   float lin_x_vel = linear_x_value;
   float lin_y_vel = linear_y_value;
   float ang_vel = angular_value;
