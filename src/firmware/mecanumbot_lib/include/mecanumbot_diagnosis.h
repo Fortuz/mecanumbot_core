@@ -14,8 +14,8 @@
 * limitations under the License.
 *******************************************************************************/
 
-#ifndef TURTLEBOT3_DIAGNOSIS_H_
-#define TURTLEBOT3_DIAGNOSIS_H_
+#ifndef MECANUMBOT_DIAGNOSIS_H_
+#define MECANUMBOT_DIAGNOSIS_H_
 
 #include <Arduino.h>
 
@@ -40,11 +40,11 @@ enum DEVICE_STATUS{
   STATUS_RUNNING              = 0
 };
 
-class Turtlebot3Diagnosis
+class MecanumbotDiagnosis
 {
  public:
-  Turtlebot3Diagnosis();
-  ~Turtlebot3Diagnosis();
+  MecanumbotDiagnosis();
+  ~MecanumbotDiagnosis();
 
   bool init();
 
@@ -62,4 +62,4 @@ class Turtlebot3Diagnosis
 
 };
 
-#endif // TURTLEBOT3_DIAGNOSIS_H_
+#endif // MECANUMBOT_DIAGNOSIS_H_

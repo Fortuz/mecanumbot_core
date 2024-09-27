@@ -101,7 +101,7 @@ static Turtlebot3Sensor sensors;
 /*******************************************************************************
 * Declaration for diagnosis
 *******************************************************************************/
-static Turtlebot3Diagnosis diagnosis;
+static MecanumbotDiagnosis diagnosis;
 
 /*******************************************************************************
 * Declaration for controllers
