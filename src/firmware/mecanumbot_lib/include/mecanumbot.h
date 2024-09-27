@@ -18,10 +18,10 @@
 #define TURTLEBOT3_H_
 
 #include <stdint.h>
-#include "turtlebot3_motor_driver.h"
-#include "turtlebot3_sensor.h"
-#include "turtlebot3_controller.h"
-#include "turtlebot3_diagnosis.h"
+#include "mecanumbot_motor_driver.h"
+#include "mecanumbot_sensor.h"
+#include "mecanumbot_controller.h"
+#include "mecanumbot_diagnosis.h"
 #include "open_manipulator_driver.h"
 
 #define DEBUG_ENABLE 1

@@ -14,7 +14,7 @@
 * limitations under the License.
 *******************************************************************************/
 
-#include "../../include/turtlebot3/turtlebot3.h"
+#include "../include/mecanumbot.h"
 
 /*******************************************************************************
 * Definition of dependency data according to TB3 model.
