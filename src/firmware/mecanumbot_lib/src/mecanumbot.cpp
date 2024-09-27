@@ -99,7 +99,7 @@ static void set_connection_state_with_joints(bool is_connected);
 static MecanumbotGrabber grabber;
 
 static float grabber_goal_position[GrabberMotorLocation::GRABBER_MOTOR_NUM_MAX] = {512.0, 512.0};
-static float grabber_goal_position_from_cmd[GrabberMotorLocation::GRABBER_MOTOR_NUM_MAX] = {512.0, 512.0};
+static float grabber_goal_position_from_topic[GrabberMotorLocation::GRABBER_MOTOR_NUM_MAX] = {512.0, 512.0};
 
 static void update_grabber_goal_position(void);
 static bool get_connection_state_with_grabber_motors();
@@ -270,6 +270,10 @@ enum ControlTableItemAddr{
   ADDR_GOAL_CURRENT_WR_GRIPPER  = 343,
   ADDR_GOAL_CURRENT_RD          = 344,
 
+  ADDR_GRABBER_MOTOR_CONNECT    = 346,
+  ADDR_GRABBER_MOTOR_TORQUE     = 347,
+  ADDR_GRABBER_GOAL_POSITION_L  = 348,
+  ADDR_GRABBER_GOAL_POSITION_R  = 352
 };
 
 typedef struct ControlItemVariables{
@@ -337,6 +341,10 @@ typedef struct ControlItemVariables{
   bool joint_goal_current_wr_joint;
   bool joint_goal_current_wr_gripper;
   bool joint_goal_current_rd;
+
+  bool is_connect_grabber_motors;
+  bool grabber_motor_torque_enable_state;
+  int32_t grabber_goal_position[2];
 
 }ControlItemVariables;
 
@@ -482,6 +490,11 @@ void MecanumbotCore::begin(const char* model_name)
   dxl_slave.addControlItem(ADDR_CMD_VEL_ANGULAR_Z, control_items.cmd_vel_angular[2]);  
   dxl_slave.addControlItem(ADDR_PROFILE_ACC_L, control_items.profile_acceleration[MotorLocation::LEFT_FRONT]);
   dxl_slave.addControlItem(ADDR_PROFILE_ACC_R, control_items.profile_acceleration[MotorLocation::RIGHT_FRONT]);
+  // Items to control grabber
+  dxl_slave.addControlItem(ADDR_GRABBER_MOTOR_CONNECT, control_items.is_connect_grabber_motors);
+  dxl_slave.addControlItem(ADDR_GRABBER_MOTOR_TORQUE, control_items.grabber_motor_torque_enable_state);
+  dxl_slave.addControlItem(ADDR_GRABBER_GOAL_POSITION_L, control_items.grabber_goal_position[0]);
+  dxl_slave.addControlItem(ADDR_GRABBER_GOAL_POSITION_R, control_items.grabber_goal_position[1]);
 
   if (p_tb3_model_info->has_manipulator == true) {
     control_items.joint_goal_position_wr_joint = false;
@@ -584,6 +597,7 @@ void MecanumbotCore::begin(const char* model_name)
     DEBUG_PRINTLN("  Please check the connection to the grabber motor and the power supply.");
     DEBUG_PRINTLN();
   }
+  control_items.is_connect_grabber_motors = get_connection_state_with_grabber_motors();
 
   if (p_tb3_model_info->has_manipulator == true) {
     // Check connection state with joints.
@@ -694,8 +708,8 @@ void update_goal_velocity_from_3values(void)
 *******************************************************************************/
 void update_grabber_goal_position(void)
 {
-  grabber_goal_position[GrabberMotorLocation::LEFT] = grabber_goal_position_from_cmd[GrabberMotorLocation::LEFT];
-  grabber_goal_position[GrabberMotorLocation::RIGHT] = grabber_goal_position_from_cmd[GrabberMotorLocation::RIGHT];
+  grabber_goal_position[GrabberMotorLocation::LEFT] = grabber_goal_position_from_topic[GrabberMotorLocation::LEFT];
+  grabber_goal_position[GrabberMotorLocation::RIGHT] = grabber_goal_position_from_topic[GrabberMotorLocation::RIGHT];
 }
 
 /*******************************************************************************
@@ -883,7 +897,13 @@ static void dxl_slave_write_callback_func(uint16_t item_addr, uint8_t &dxl_err_c
 
     case ADDR_CMD_VEL_ANGULAR_Z:
       goal_velocity_from_cmd[VelocityType::ANGULAR] = constrain((float)(control_items.cmd_vel_angular[2]*0.01f), min_angular_velocity, max_angular_velocity);
-      break;            
+      break;
+
+    case ADDR_GRABBER_GOAL_POSITION_L:
+      grabber_goal_position_from_topic[GrabberMotorLocation::LEFT] = control_items.grabber_goal_position[0];
+
+    case ADDR_GRABBER_GOAL_POSITION_R:
+      grabber_goal_position_from_topic[GrabberMotorLocation::RIGHT] = control_items.grabber_goal_position[1];        
 
     case ADDR_PROFILE_ACC_L:
     case ADDR_PROFILE_ACC_R:
