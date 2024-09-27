@@ -329,9 +329,9 @@ static ControlItemVariables control_items;
 
 
 /*******************************************************************************
-* Definition for TurtleBot3Core 'begin()' function
+* Definition for MecanumbotCore 'begin()' function
 *******************************************************************************/
-void TurtleBot3Core::begin(const char* model_name)
+void MecanumbotCore::begin(const char* model_name)
 {
   uint16_t model_motor_rpm;
 
@@ -585,9 +585,9 @@ void TurtleBot3Core::begin(const char* model_name)
 }
 
 /*******************************************************************************
-* Definition for TurtleBot3Core 'run()' function
+* Definition for MecanumbotCore 'run()' function
 *******************************************************************************/
-void TurtleBot3Core::run()
+void MecanumbotCore::run()
 {
   static uint32_t pre_time_to_control_motor;
 
