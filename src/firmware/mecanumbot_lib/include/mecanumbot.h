@@ -23,6 +23,7 @@
 #include "mecanumbot_controller.h"
 #include "mecanumbot_diagnosis.h"
 #include "open_manipulator_driver.h"
+#include "mecanumbot_grabber.h"
 
 #define DEBUG_ENABLE 1
 

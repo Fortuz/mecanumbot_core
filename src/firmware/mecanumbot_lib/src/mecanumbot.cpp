@@ -94,6 +94,21 @@ static bool get_connection_state_with_joints();
 static void set_connection_state_with_joints(bool is_connected);
 
 /*******************************************************************************
+* Declaration for grabbers
+*******************************************************************************/
+static MecanumbotGrabber grabber;
+
+static float grabber_goal_position[GrabberMotorLocation::MOTOR_NUM_MAX] = {512.0, 512.0};
+static float grabber_goal_position_from_cmd[GrabberMotorLocation::MOTOR_NUM_MAX] = {512.0, 512.0};
+
+static void update_grabber_goal_position(void);
+static bool get_connection_state_with_grabber_motors();
+static void set_connection_state_with_grabber_motors(bool is_connected);
+static bool get_connection_state_with_grabber_joints();
+static void set_connection_state_with_grabber_joints(bool is_connected);
+
+
+/*******************************************************************************
 * Declaration for sensors
 *******************************************************************************/
 static MecanumbotSensor sensors;
@@ -556,7 +571,19 @@ void MecanumbotCore::begin(const char* model_name)
     DEBUG_PRINTLN("  Please check the connection to the motor and the power supply.");
     DEBUG_PRINTLN();
   } 
-  control_items.is_connect_motors = get_connection_state_with_motors();  
+  control_items.is_connect_motors = get_connection_state_with_motors();
+
+  // Check connection state with grabber motors.
+  if (grabber.is_connected() == true){
+    grabber.set_torque(true);
+    set_connection_state_with_grabber_motors(true);
+    DEBUG_PRINTLN("Grabber motors are connected");
+  } else {
+    set_connection_state_with_grabber_motors(false);
+    DEBUG_PRINTLN("Can't communicate with the grabber motors!");
+    DEBUG_PRINTLN("  Please check the connection to the grabber motor and the power supply.");
+    DEBUG_PRINTLN();
+  }
 
   if (p_tb3_model_info->has_manipulator == true) {
     // Check connection state with joints.
@@ -638,13 +665,18 @@ void MecanumbotCore::run()
     if(get_connection_state_with_motors() == true){
       motor_driver.control_motors(p_tb3_model_info->wheel_separation, goal_velocity[VelocityType::LINEAR_X], goal_velocity[VelocityType::LINEAR_Y], goal_velocity[VelocityType::ANGULAR]);
     }
+
+    update_grabber_goal_position();
+    if (get_connection_state_with_grabber_motors() == true){
+      grabber.control_grabber(grabber_goal_position[GrabberMotorLocation::LEFT], grabber_goal_position[GrabberMotorLocation::RIGHT]);
+    }
   }  
 }
 
 
 /*******************************************************************************
 * Function definition for updating velocity values 
-* to be used for control of DYNAMIXEL(motors).
+* to be used for control of DYNAMIXEL(motors) [MECANUM].
 *******************************************************************************/
 void update_goal_velocity_from_3values(void)
 {
@@ -655,6 +687,16 @@ void update_goal_velocity_from_3values(void)
   sensors.setLedPattern(goal_velocity[VelocityType::LINEAR_X], goal_velocity[VelocityType::ANGULAR]);
 }
 
+
+/*******************************************************************************
+* Function definition for updating grabber position values 
+* to be used for control of DYNAMIXEL(motors) [GRABBER].
+*******************************************************************************/
+void update_grabber_goal_position(void)
+{
+  grabber_goal_position[GrabberMotorLocation::LEFT] = grabber_goal_position_from_cmd[GrabberMotorLocation::LEFT];
+  grabber_goal_position[GrabberMotorLocation::RIGHT] = grabber_goal_position_from_cmd[GrabberMotorLocation::RIGHT];
+}
 
 /*******************************************************************************
 * Function definition for updating control items in TB3.
@@ -988,6 +1030,36 @@ void update_connection_state_with_ros2_node()
   }
 
   control_items.is_connect_ros2_node = get_connection_state_with_ros2_node();
+}
+
+/*******************************************************************************
+* Function definition to check the connection with the grabber motor.
+*******************************************************************************/
+static bool is_connected_grabber_motors = false;
+
+static bool get_connection_state_with_grabber_motors()
+{
+  return is_connected_grabber_motors;
+}
+
+static void set_connection_state_with_grabber_motors(bool is_connected)
+{
+  is_connected_grabber_motors = is_connected;
+}
+
+/*******************************************************************************
+* Function definition to check the connection with the grabber motor.
+*******************************************************************************/
+static bool is_connected_grabber_joints = false;
+
+static bool get_connection_state_with_grabber_joints()
+{
+  return is_connected_grabber_joints;
+}
+
+static void set_connection_state_with_grabber_joints(bool is_connected)
+{
+  is_connected_grabber_joints = is_connected;
 }
 
 

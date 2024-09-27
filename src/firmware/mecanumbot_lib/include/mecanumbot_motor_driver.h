@@ -64,6 +64,29 @@ class MecanumbotMotorDriver
   Dynamixel2Arduino& getDxl();
   
  private:
+  // Limit values (XM430-W210-T and XM430-W350-T)
+  // MAX RPM is 77 when DXL is powered 12.0V
+  // 77 / 0.229 (RPM) = 336.24454...
+  const uint16_t LIMIT_X_MAX_VELOCITY = 337; 
+  // V = r * w = r     *        (RPM             * 0.10472)
+  //           = 0.033 * (0.229 * Goal_Velocity) * 0.10472
+  // Goal_Velocity = V * 1263.632956882
+  const float VELOCITY_CONSTANT_VALUE = 1263.632956882; 
+
+  /* DYNAMIXEL Information for controlling motors and  */
+  const uint8_t DXL_MOTOR_ID_LEFT_FRONT = 2; // ID of front left motor
+  const uint8_t DXL_MOTOR_ID_RIGHT_FRONT = 1; // ID of front right motor
+  const uint8_t DXL_MOTOR_ID_LEFT_BACK = 4; // ID of rear left motor
+  const uint8_t DXL_MOTOR_ID_RIGHT_BACK = 3; // ID of rear right motor
+  const float DXL_PORT_PROTOCOL_VERSION = 2.0; // Dynamixel protocol version 2.0
+  const uint32_t DXL_PORT_BAUDRATE = 1000000; // Baud rate of Dynamixel
+  const int OPENCR_DXL_DIR_PIN = 84; // Arduino pin number of DYNAMIXEL direction pin on OpenCR.
+
+  ParamForSyncReadInst_t sync_read_param;
+  ParamForSyncWriteInst_t sync_write_param;
+  RecvInfoFromStatusInst_t read_result;
+  Dynamixel2Arduino dxl;
+
   uint8_t left_front_wheel_id_;
   uint8_t right_front_wheel_id_;
   uint8_t left_back_wheel_id_;
