@@ -95,25 +95,114 @@ Please refer to [the official instructions](https://emanual.robotis.com/docs/en/
 ```bash
 $ ssh ubuntu@{IP_ADDRESS_OF_RASPBERRY_PI}
 ```
-Password: *** (TODO will it be displayed here ?)
+Password: turtlebot
 
-### 5.2 Navigate to code (TODO exact file ?)
+### 5.2 Navigate to source files
 ```bash
 $ cd ~/turtlebot3_ws/src/turtlebot3/turtlebot3_node/src
 ```
 
-### 5.3 Modify velocity callback function (TODO exact file exact lines ?)
-In file `?.py` line ?-?:
-From this: (TODO)
+### 5.3 Modify velocity callback function
+In file `turtlebot3.cpp`, **line 325** (`cmd_vel_callback` function):
+
+From this:
 ```
-???
+data.dword[1] = 0;
 ```
-Modify to this: (TODO)
+Modify to this:
 ```
-???
+data.dword[1] = static_cast<int32_t>(msg->linear.y * 100);
 ```
 
-### 5.4 Build package
+### 5.4 Add grabber callback function
+In file `turtlebot3.cpp`, after **line 345** (at the end of the file), add:
+```
+void TurtleBot3::grabber_goal_pos_callback()
+{
+  auto qos = rclcpp::QoS(rclcpp::KeepLast(10));
+  grabber_goal_pos_sub_ = this->create_subscription<grabber_msg_interface::msg::GrabberPosition>(
+    "grabber_goal_position",
+    qos,
+    [this](const grabber_msg_interface::msg::GrabberPosition::SharedPtr msg) -> void
+    {
+      std::string sdk_msg;
+
+      union Data {
+        int32_t dword[2];
+        uint8_t byte[4 * 2];
+      } data;
+
+      data.dword[0] = static_cast<int32_t>(msg->l);
+      data.dword[1] = static_cast<int32_t>(msg->r);
+
+      uint16_t start_addr = extern_control_table.grabber_goal_position_l.addr;
+      uint16_t addr_length =
+      (extern_control_table.grabber_goal_position_r.addr -
+      extern_control_table.grabber_goal_position_l.addr) +
+      extern_control_table.grabber_goal_position_r.length;
+
+      uint8_t * p_data = &data.byte[0];
+
+      dxl_sdk_wrapper_->set_data_to_device(start_addr, addr_length, p_data, &sdk_msg);
+
+      RCLCPP_DEBUG(
+        this->get_logger(),
+        "grabber_goal_pos_l: %f grabber_goal_pos_r: %f msg : %s", msg->l, msg->r, sdk_msg.c_str());
+    }
+  );
+}
+```
+
+### 5.5 Navigate to header files
+```bash
+$ cd ~/turtlebot3_ws/src/turtlebot3/turtlebot3_node/include/turtlebot3_node/
+```
+
+### 5.6 Add custom addresses at the end of control table
+In file `control_table.hpp`, after **line 107** (inside the `ControlTable` struct) add the following lines:
+```
+ControlItem grabber_goal_position_l = {348, RAM, 4, READ_WRITE};
+ControlItem grabber_goal_position_r = {352, RAM, 4, READ_WRITE};
+```
+
+### 5.7 Update header file
+In file `turtlebot3.hpp`, at the beginning add the following include:
+```
+#include "grabber_msg_interface/msg/grabber_position.hpp"
+```
+later, at **line 96** add:
+```
+void grabber_goal_pos_callback();
+```
+and at **line 114**, add:
+```
+rclcpp::Subscription<grabber_msg_interface::msg::GrabberPosition>::SharedPtr grabber_goal_pos_sub_;
+```
+
+### 5.8 Add custom grabber msg
+Copy `https://github.com/Fortuz/mecanumbot/tree/mecanum_teleop/grabber_msg_interface` folder to `~/turtlebot3_ws/src/`
+
+### 5.9 Update CMakeLists.txt
+Navigate to folder:
+```bash
+cd ~/turtlebot3_ws/src/turtlebot3/turtlebot3_node
+```
+In `CMakeListstxt`, **line 31** (at the end of other find_packages) add:
+```
+find_package(grabber_msg_interface REQUIRED)   
+```
+and **line 69** (at the end of dependencies), add:
+```
+"grabber_msg_interface"
+```
+
+### 5.10 Update package.xml
+In `package.xml` after **line 29** add:
+```
+<depend>grabber_msg_interface</depend>
+```
+
+### 5.11 Build package
 Navigate back to root of workspace
 ```bash
 $ cd ~/turtlebot3_ws
