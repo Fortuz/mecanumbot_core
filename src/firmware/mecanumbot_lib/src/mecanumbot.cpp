@@ -98,8 +98,8 @@ static void set_connection_state_with_joints(bool is_connected);
 *******************************************************************************/
 static MecanumbotGrabber grabber;
 
-static float grabber_goal_position[GrabberMotorLocation::GRABBER_MOTOR_NUM_MAX] = {512.0, 512.0};
-static float grabber_goal_position_from_topic[GrabberMotorLocation::GRABBER_MOTOR_NUM_MAX] = {512.0, 512.0};
+static float grabber_goal_position[GrabberMotorLocation::GRABBER_MOTOR_NUM_MAX] = {347.0, 347.0};
+static float grabber_goal_position_from_topic[GrabberMotorLocation::GRABBER_MOTOR_NUM_MAX] = {347.0, 347.0};
 
 static void update_grabber_goal_position(void);
 static bool get_connection_state_with_grabber_motors();
