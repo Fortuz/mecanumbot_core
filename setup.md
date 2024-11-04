@@ -106,17 +106,17 @@ $ cd ~/turtlebot3_ws/src/turtlebot3/turtlebot3_node/src
 In file `turtlebot3.cpp`, **line 325** (`cmd_vel_callback` function):
 
 From this:
-```
+```cpp
 data.dword[1] = 0;
 ```
 Modify to this:
-```
+```cpp
 data.dword[1] = static_cast<int32_t>(msg->linear.y * 100);
 ```
 
 ### 5.4 Add grabber callback function
 In file `turtlebot3.cpp`, after **line 345** (at the end of the file), add:
-```
+```cpp
 void TurtleBot3::grabber_goal_pos_callback()
 {
   auto qos = rclcpp::QoS(rclcpp::KeepLast(10));
@@ -153,36 +153,60 @@ void TurtleBot3::grabber_goal_pos_callback()
 }
 ```
 
-### 5.5 Navigate to header files
+### 5.5 Add callback to run method
+In file `turtlebot3.cpp`, after **line 207** (in `run` function), add:
+```cpp
+grabber_goal_pos_callback();
+```
+
+### 5.6 Update memory
+In file `turtlebot3.cpp`, at **line 68 to 72** (in `init_dynamixel_sdk_wrapper` function), modify this:
+```cpp
+dxl_sdk_wrapper_->init_read_memory(
+  extern_control_table.millis.addr,
+  (extern_control_table.profile_acceleration_right.addr - extern_control_table.millis.addr) +
+  extern_control_table.profile_acceleration_right.length
+);
+```
+To this:
+```cpp
+dxl_sdk_wrapper_->init_read_memory(
+  extern_control_table.millis.addr,
+  (extern_control_table.grabber_goal_position_r.addr - extern_control_table.millis.addr) +
+  extern_control_table.grabber_goal_position_r.length
+);
+```
+
+### 5.7 Navigate to header files
 ```bash
 $ cd ~/turtlebot3_ws/src/turtlebot3/turtlebot3_node/include/turtlebot3_node/
 ```
 
-### 5.6 Add custom addresses at the end of control table
+### 5.8 Add custom addresses at the end of control table
 In file `control_table.hpp`, after **line 107** (inside the `ControlTable` struct) add the following lines:
-```
+```cpp
 ControlItem grabber_goal_position_l = {348, RAM, 4, READ_WRITE};
 ControlItem grabber_goal_position_r = {352, RAM, 4, READ_WRITE};
 ```
 
-### 5.7 Update header file
+### 5.9 Update header file
 In file `turtlebot3.hpp`, at the beginning add the following include:
-```
+```cpp
 #include "grabber_msg_interface/msg/grabber_position.hpp"
 ```
 later, at **line 96** add:
-```
+```cpp
 void grabber_goal_pos_callback();
 ```
 and at **line 114**, add:
-```
+```cpp
 rclcpp::Subscription<grabber_msg_interface::msg::GrabberPosition>::SharedPtr grabber_goal_pos_sub_;
 ```
 
-### 5.8 Add custom grabber msg
+### 5.10 Add custom grabber msg
 Copy `https://github.com/Fortuz/mecanumbot/tree/mecanum_teleop/grabber_msg_interface` folder to `~/turtlebot3_ws/src/`
 
-### 5.9 Update CMakeLists.txt
+### 5.11 Update CMakeLists.txt
 Navigate to folder:
 ```bash
 cd ~/turtlebot3_ws/src/turtlebot3/turtlebot3_node
@@ -196,13 +220,13 @@ and **line 69** (at the end of dependencies), add:
 "grabber_msg_interface"
 ```
 
-### 5.10 Update package.xml
+### 5.12 Update package.xml
 In `package.xml` after **line 29** add:
-```
+```xml
 <depend>grabber_msg_interface</depend>
 ```
 
-### 5.11 Build package
+### 5.13 Build package
 Navigate back to root of workspace
 ```bash
 $ cd ~/turtlebot3_ws
