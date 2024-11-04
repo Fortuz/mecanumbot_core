@@ -39,8 +39,8 @@ public:
   
 private:
     /* Limit values */
-    const int64_t LIMIT_GRABBER_MIN = 400; // 512= straight forward
-    const int64_t LIMIT_GRABBER_MAX = 624;
+    const int64_t LIMIT_GRABBER_MIN = 160; // 347= straight forward
+    const int64_t LIMIT_GRABBER_MAX = 854;
 
     /* DYNAMIXEL Information for controlling motors */
     const uint8_t DXL_MOTOR_ID_LEFT = 5; // ID of left motor
