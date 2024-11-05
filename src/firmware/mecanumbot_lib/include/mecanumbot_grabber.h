@@ -39,7 +39,7 @@ public:
   
 private:
     /* Limit values */
-    const int64_t LIMIT_GRABBER_MIN = 160; // 347= straight forward
+    const int64_t LIMIT_GRABBER_MIN = 160; // 507= straight forward
     const int64_t LIMIT_GRABBER_MAX = 854;
 
     /* DYNAMIXEL Information for controlling motors */
